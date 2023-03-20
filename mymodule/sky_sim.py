@@ -11,6 +11,11 @@ import matplotlib.pyplot as plt
 NSRC=1_000_000
 
 def get_ra_dec():
+'''
+This function returns the RA and DEC coordinates for the Andromeda galaxy in degrees.
+The returned values are floats.
+'''
+
     # Determine Andromeda location in ra/dec degrees
     # from wikipedia
     RA = '00:42:44.3'
