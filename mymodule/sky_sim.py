@@ -1,5 +1,5 @@
 # Determine Andromeda location in ra/dec degrees
-
+''' A script to simulate a catalogue of simulated stars around Andromeda galaxy '''
 # from wikipedia
 ra = '00:42:44.3'
 dec = '41:16:09'
