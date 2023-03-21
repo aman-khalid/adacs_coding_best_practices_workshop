@@ -7,6 +7,7 @@ Last Change: 20/03/23
 import math as mth
 import random as rand
 import matplotlib.pyplot as plt
+import argparse
 
 NSRC=1_000_000
 
@@ -41,14 +42,42 @@ def make_stars(ra, dec, NSRC):
         decs.append(dec + rand.uniform(-1,1))
     return (ras, decs)
 
+
+def skysim_parser():
+    """
+    Configure the argparse for skysim
+
+    Returns
+    -------
+    parser : argparse.ArgumentParser
+        The parser for skysim.
+    """
+    parser = argparse.ArgumentParser(prog='sky_sim', prefix_chars='-')
+    parser.add_argument('--ra', dest = 'ra', type=float, default=None,
+                        help="Central ra (degrees) for the simulation location")
+    parser.add_argument('--dec', dest = 'dec', type=float, default=None,
+                        help="Central dec (degrees) for the simulation location")
+    parser.add_argument('--out', dest='out', type=str, default='catalog.csv',
+                        help='destination for the output catalog')
+    return parser
+
 if __name__=='__main__':
-    ra, dec = get_ra_dec()
-    ras, decs = make_stars(ra, dec, NSRC)
+    parser = skysim_parser()
+    options = parser.parse_args()
+    # if ra/dec are not supplied the use a default value
+    if None in [options.ra, options.dec]:
+        ra, dec = get_ra_dec()
+    else:
+        ra = options.ra
+        dec = options.dec
+
+    ras, decs = make_stars(ra,dec, NSRC)
     # now write these to a csv file for use by my other program
-    with open('./catalog.csv','w', encoding='utf-8') as f:
+    with open(options.out,'w') as f:
         print("id,ra,dec", file=f)
         for i in range(NSRC):
-            f.write(F"{i:07d}, {ras[i]:12f}, {decs[i]:12f}\n")
+            print(f"{i:07d}, {ras[i]:12f}, {decs[i]:12f}", file=f)
+    print(f"Wrote {options.out}")
 
     plt.scatter(ras[::1000], decs[::1000])
     plt.xlabel('RA [deg]')
