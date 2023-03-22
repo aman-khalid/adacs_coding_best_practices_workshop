@@ -4,10 +4,11 @@ A script to simulate a catalogue of simulated stars around Andromeda galaxy
 Author: Aman Khalid
 Last Change: 20/03/23
 '''
+import numpy as np
 import math as mth
-import random as rand
 import matplotlib.pyplot as plt
 import argparse
+import numpy as np
 
 NSRC=1_000_000
 
@@ -34,14 +35,9 @@ def get_ra_dec():
 
 def make_stars(ra, dec, NSRC):
     # make 1,000,000 stars within 1 degree of Andromeda
-
-    ras = []
-    decs = []
-    for i in range(NSRC):
-        ras.append(ra + rand.uniform(-1,1))
-        decs.append(dec + rand.uniform(-1,1))
+    ras = np.random.uniform(size=NSRC,  low=ra-1, high=ra+1)
+    decs = np.random.uniform(size=NSRC, low=dec-1, high=dec+1)
     return (ras, decs)
-
 
 def skysim_parser():
     """
@@ -73,6 +69,7 @@ if __name__=='__main__':
 
     ras, decs = make_stars(ra,dec, NSRC)
     # now write these to a csv file for use by my other program
+
     with open(options.out,'w') as f:
         print("id,ra,dec", file=f)
         for i in range(NSRC):
